@@ -1,104 +1,52 @@
-<p align="center">
-  <a href="https://vercel.com/platforms">
-    <img src="https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png" height="96">
-    <h3 align="center">Platforms Starter Kit</h3>
-  </a>
-</p>
+# sample-nextjs-rss-reader
 
-<p align="center">
-  The <em>all-in-one</em> starter kit <br/>
-  for building platforms on Vercel.
-</p>
+これは、 [How to Build a Multi-Tenant App with Custom Domains Using Next.js – Vercel Docs](https://vercel.com/guides/nextjs-multi-tenant-application) を参考に作った RSS Reader です。
 
-<p align="center">
-  <a href="#introduction"><strong>Introduction</strong></a> ·
-  <a href="https://vercel.com/guides/nextjs-multi-tenant-application"><strong>Guide</strong></a> ·
-  <a href="https://demo.vercel.pub/"><strong>Demo</strong></a> ·
-  <a href="#contributing"><strong>Contributing</strong></a>
-</p>
-<br/>
+## 開発方法
 
-## Deploy Your Own
+### Planet Scaleのデータベース、ブランチを作成（初回のみ）
 
-[Read the guide](https://vercel.com/guides/nextjs-multi-tenant-application) to learn how to deploy your own version of this template.
+データベースを作成
 
-## Introduction
+```shell
+$pscale database create sample-nextjs-rss-reader --region ap-northeast
+```
 
-Multi-tenant applications serve multiple customers across different subdomains/custom domains with a single unified codebase. 
+ブランチを作成（dev、shadow）
 
-For example, our demo is a multi-tenant application:
+```shell
+$pscale branch create sample-nextjs-rss-reader dev 
+$pscale branch create sample-nextjs-rss-reader shadow 
+```
 
-- Subdomain: [demo.vercel.pub](http://demo.vercel.pub)
-- Custom domain: [platformize.co](http://platformize.co) (maps to [demo.vercel.pub](http://demo.vercel.pub))
-- Build your own: [app.vercel.pub](http://app.vercel.pub)
+### Planet Scaleを起動
 
-Another example is [Hashnode](https://vercel.com/customers/hashnode), a popular blogging platform. Each writer has their own unique `.hashnode.dev` subdomain for their blog:
+２つのターミナルで下記のコマンドを実行します。
 
-- [eda.hashnode.dev](https://eda.hashnode.dev/)
-- [katycodesstuff.hashnode.dev](https://katycodesstuff.hashnode.dev/)
-- [pit.hashnode.dev](https://pit.hashnode.dev/)
+ターミナル１
 
-Users can also map custom domains to their `.hashnode.dev` subdomain:
+```shell
+$pscale connect sample-nextjs-rss-reader dev --port 3309
+```
 
-- [catalins.tech](https://catalins.tech/) → [pit.hashnode.dev](https://pit.hashnode.dev/)
+ターミナル２
 
-This repository makes it easier than ever for creators to build their own platform.
+```shell
+$pscale connect sample-nextjs-rss-reader shadow --port 3310
+```
 
-## Template features
+### アプリを起動
 
-Forget manually setting up CNAME records, wrestling with DNS, or making custom server rewrite rules with NGINX. With Vercel and the Platforms Starter Kit, you can focus on building the next big thing.
+```shell
+yarn dev
+```
 
-- **Custom domains**: Subdomain and custom domains support with [Edge Functions](https://vercel.com/features/edge-functions) and the [Vercel Domains API](https://domains-api.vercel.app/).
-- **Static generation with ISR**: Performance without sacrificing personalization, by combining [Incremental Static Regeneration](https://vercel.com/docs/concepts/next.js/incremental-static-regeneration) (ISR) and [Middleware](https://vercel.com/docs/concepts/functions/edge-functions#middleware). ISR allows you to create new content (with custom domains) on demand without needing to redeploy your application.
-- **Uploading custom images**: Allow your customers to upload custom thumbnail images with our Cloudinary integration.
-- **Static tweets**: Avoid [Cumulative Layout Shift](https://vercel.com/blog/core-web-vitals) (CLS) from the native Twitter embed by using our [static tweets implementation](https://static-tweets-tailwind.vercel.app/) (supports image, video, gif, poll, retweets, quote retweets, and more).
+## Tips
 
-## Examples of platforms
+### Prismaのログを見たい時
 
-Vercel customers like [Hashnode](https://vercel.com/customers/hashnode), [Super](https://super.so), and [Cal.com](https://cal.com) are building scalable platforms on top of Vercel and Next.js. There are multiple types of platforms you can build with this starter kit:
+[Debugging (Reference) - Prisma Docs](https://www.prisma.io/docs/concepts/components/prisma-client/debugging)
 
-### 1. Content creation platforms
-
-These are content-heavy platforms (blogs) with simple, standardized page layouts and route structure. 
-
-> “With Vercel, we spend less time managing our infrastructure and more time delivering value to our users.” — Sandeep Panda, Co-founder, Hashnode
-
-1. [Hashnode](https://hashnode.com)
-2. [Mirror.xyz](https://mirror.xyz/)
-3. [Papyrus.so](https://papyrus.so/)
-
-### 2. Website & e-commerce store builders
-
-No-code site builders with customizable pages. 
-
-By using Next.js and Vercel, [Super](https://super.so/) has fast, globally distributed websites with a no-code editor (Notion). Their customers get all the benefits of Next.js (like [Image Optimization](https://nextjs.org/docs/basic-features/image-optimization)) without touching any code.
-
-1. [Super.so](https://super.so)
-2. [Typedream](https://typedream.com)
-3. [Makeswift](https://www.makeswift.com/)
-
-### 3. B2B2C platforms
-
-Multi-tenant authentication, login, and access controls.
-
-With Vercel and Next.js, platforms like [Instatus](https://instatus.com) are able to create status pages that are *10x faster* than competitors.
-
-1. [Instatus](https://instatus.com/)
-2. [Cal.com](https://cal.com/)
-3. [DAO Central](https://daocentral.com/)
-
-## Built on open source
-
-This working demo site was built using the Platforms Starter Kit and:
-
-- [Next.js](https://nextjs.org/) as the React framework
-- [Tailwind](https://tailwindcss.com/) for CSS styling
-- [Prisma](https://prisma.io/) as the ORM for database access
-- [PlanetScale](https://planetscale.com/) as the database (MySQL)
-- [NextAuth.js](https://next-auth.js.org/) for authentication
-- [Vercel](http://vercel.com/) for deployment
-
-## Contributing
-
-- [Start a discussion](https://github.com/vercel/platforms/discussions) with a question, piece of feedback, or idea you want to share with the team.
-- [Open an issue](https://github.com/vercel/platforms/issues) if you believe you've encountered a bug with the starter kit.
+```shell
+DEBUG="*" yarn dev
+```

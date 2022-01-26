@@ -1,23 +1,26 @@
 import NextAuth from "next-auth";
-import TwitterProvider from "next-auth/providers/twitter";
+import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 
 export default NextAuth({
   providers: [
-    TwitterProvider({
-      clientId: process.env.TWITTER_ID,
-      clientSecret: process.env.TWITTER_SECRET,
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        }
+      },
       profile(profile) {
         return {
-          id: profile.id_str,
+          id: profile.sub,
           name: profile.name,
-          username: profile.screen_name,
-          email: profile.email && profile.email != "" ? profile.email : null,
-          image: profile.profile_image_url_https.replace(
-            /_normal\.(jpg|png|gif)$/,
-            ".$1"
-          ),
+          email: profile.email,
+          image: profile.picture,
         };
       },
     }),
