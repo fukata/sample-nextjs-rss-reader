@@ -61,12 +61,12 @@ export default function Login() {
             }}
             className={`${
               loading ? "cursor-not-allowed bg-white" : "bg-white"
-            } group flex justify-center items-center space-x-5 w-full sm:px-4 h-16 rounded-md focus:outline-none border border-2 border-gray`}
+            } hover:bg-gray-100 group flex justify-center items-center space-x-5 w-full sm:px-4 h-16 rounded-md focus:outline-none border border-2 border-gray`}
           >
             {loading ? (
-              <LoadingDots color="#fff" />
+              <LoadingDots color="#000" />
             ) : (
-              <img className="w-6 h-6 group-hover:animate-wiggle" src="/google-logo.svg" />
+              <img className="w-6 h-6" src="/google-logo.svg" />
             )}
           </button>
 

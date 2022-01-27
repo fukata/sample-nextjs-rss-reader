@@ -2,7 +2,19 @@
 
 これは、 [How to Build a Multi-Tenant App with Custom Domains Using Next.js – Vercel Docs](https://vercel.com/guides/nextjs-multi-tenant-application) を参考に作った RSS Reader です。
 
+## 構成
+
+- Next.js
+- NextAuth.js
+  - Google OAuth
+- Prisma
+- Planet Scale
+
 ## 開発方法
+
+### .env の作成
+
+`.env` ファイルを `.env.sample` を参考に作成します。
 
 ### Planet Scaleのデータベース、ブランチを作成（初回のみ）
 
@@ -35,10 +47,16 @@ $pscale connect sample-nextjs-rss-reader dev --port 3309
 $pscale connect sample-nextjs-rss-reader shadow --port 3310
 ```
 
+### マイグレーション
+
+```shell
+$npx prisma migrate dev
+```
+
 ### アプリを起動
 
 ```shell
-yarn dev
+$yarn dev
 ```
 
 ## Tips
@@ -48,5 +66,5 @@ yarn dev
 [Debugging (Reference) - Prisma Docs](https://www.prisma.io/docs/concepts/components/prisma-client/debugging)
 
 ```shell
-DEBUG="*" yarn dev
+$DEBUG="*" yarn dev
 ```
