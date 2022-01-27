@@ -6,8 +6,8 @@ import prisma from "@/lib/prisma";
 export default NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
+      clientId: process.env.GOOGLE_ID as string,
+      clientSecret: process.env.GOOGLE_SECRET as string,
       authorization: {
         params: {
           prompt: "consent",
@@ -25,7 +25,7 @@ export default NextAuth({
       },
     }),
   ],
-  secret: process.env.SECRET,
+  secret: process.env.SECRET as string,
   pages: {
     signIn: `/login`,
     verifyRequest: `/login`,
@@ -33,8 +33,10 @@ export default NextAuth({
   adapter: PrismaAdapter(prisma),
   callbacks: {
     async session({ session, user }) {
-      session.user.id = user.id;
-      session.user.username = user.username;
+      if (session && session.user) {
+        session.user.id = user.id;
+        session.user.name = user.name;
+      }
       return session;
     },
   },

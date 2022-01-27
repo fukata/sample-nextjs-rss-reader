@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export default function middleware(req) {
+export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl; // get pathname of request (e.g. /login)
 
   if (!pathname.includes(".") && !pathname.startsWith("/api")) {

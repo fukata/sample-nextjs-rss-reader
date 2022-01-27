@@ -7,7 +7,7 @@ import { signOut } from "next-auth/react";
 import Loader from "./Loader";
 import useRequireAuth from "../../lib/useRequireAuth";
 
-export default function Layout({ siteId, children }) {
+export default function Layout({ siteId, children }: { siteId: any, children: any }) {
   const title = "Platforms on Vercel";
   const description =
     "Create a fullstack application with multi-tenancy and custom domains support using Next.js, Prisma, and PostgreSQL";
@@ -21,7 +21,9 @@ export default function Layout({ siteId, children }) {
     : router.asPath.split("/")[3];
 
   const session = useRequireAuth();
-  if (!session) return <Loader />;
+  if (typeof session !== 'object') return <Loader />;
+
+  const currentUser: any = session!.user;
 
   return (
     <>
@@ -58,15 +60,17 @@ export default function Layout({ siteId, children }) {
               <Link href="/">
                 <a className="flex justify-center items-center">
                   <div className="h-8 w-8 inline-block rounded-full overflow-hidden align-middle">
-                    <Image
-                      src={session.user.image}
-                      width={40}
-                      height={40}
-                      alt={session.user.name}
-                    />
+                    {currentUser.image &&
+                      <Image
+                        src={currentUser.image}
+                        width={40}
+                        height={40}
+                        alt={currentUser.name || ''}
+                      />
+                    }
                   </div>
                   <span className="sm:block inline-block ml-3 font-medium truncate">
-                    {session.user.name}
+                    {currentUser.name}
                   </span>
                 </a>
               </Link>
@@ -82,6 +86,7 @@ export default function Layout({ siteId, children }) {
               href="https://github.com/vercel/platforms"
               target="_blank"
               className="font-cal flex items-center space-x-2 text-gray-700 px-5 py-3 sm:hover:text-black sm:hover:bg-white transition-all ease-in-out duration-150"
+              rel="noreferrer"
             >
               <p className="hidden sm:block">Build my own</p>
               <svg

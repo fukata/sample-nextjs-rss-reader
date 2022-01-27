@@ -1,5 +1,6 @@
 import { signIn } from "next-auth/react";
 import Head from "next/head";
+import Image from "next/image";
 import { useState } from "react";
 import LoadingDots from "@/components/app/loading-dots";
 
@@ -39,11 +40,13 @@ export default function Login() {
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={logo} />
       </Head>
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <img
-          className="mx-auto h-12 w-auto"
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+        <Image
           src="/logo.png"
+          className="mx-auto h-12 w-auto"
           alt="Platforms Starter Kit"
+          width="48px"
+          height="48px"
         />
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sample App
@@ -66,7 +69,13 @@ export default function Login() {
             {loading ? (
               <LoadingDots color="#000" />
             ) : (
-              <img className="w-6 h-6" src="/google-logo.svg" />
+              <Image
+                src="/google-logo.svg"
+                className="w-6 h-6"
+                alt="Login with Google"
+                width="28px"
+                height="28px"
+              />
             )}
           </button>
 
