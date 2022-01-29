@@ -24,7 +24,6 @@ import {Session} from "next-auth";
  * ```
  *
  * @param handler
- * @constructor
  */
 export function requireAuthApi(handler: (req: NextApiRequest, res: NextApiResponse<ApiResponseData<any>>, session: Session) => void) {
   return async function (req: NextApiRequest, res: NextApiResponse<ApiResponseData<any>>) {
