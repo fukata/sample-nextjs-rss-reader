@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import LoadingDots from "@/components/app/loading-dots";
 
+// TODO: 複数ヶ所でアプリタイトルを取得しているのでまとめる
 const pageTitle = "Login";
 const logo = "/favicon.ico";
 const description =

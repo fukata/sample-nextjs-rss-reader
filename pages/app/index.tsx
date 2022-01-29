@@ -1,16 +1,15 @@
 import Head from "next/head";
 import Link from "next/link";
-
-const pageTitle = "Sample App";
+import {pageTitle} from "@/lib/helper";
 
 export default function Index() {
   return (
     <div className="">
       <Head>
-        <title>{pageTitle}</title>
+        <title>{pageTitle()}</title>
       </Head>
       <div className="">
-        <h1>{pageTitle}</h1>
+        <h1>{pageTitle()}</h1>
 
         <Link href="/login">ログイン</Link>
       </div>
