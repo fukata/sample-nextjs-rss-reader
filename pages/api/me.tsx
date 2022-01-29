@@ -7,7 +7,11 @@ type ResponseData = {
   name: string;
 }
 
-export function MeApi(req: NextApiRequest, res: NextApiResponse<ApiResponseData<ResponseData>>, session: Session) {
+export function MeApi(
+  req: NextApiRequest,
+  res: NextApiResponse<ApiResponseData<ResponseData>>,
+  session: Session
+) {
   const currentUser = session.user;
   return res.status(200).json({
     status: 'ok',

@@ -25,7 +25,11 @@ import {Session} from "next-auth";
  *
  * @param handler
  */
-export function requireAuthApi(handler: (req: NextApiRequest, res: NextApiResponse<ApiResponseData<any>>, session: Session) => void) {
+export function requireAuthApi(handler: (
+  req: NextApiRequest,
+  res: NextApiResponse<ApiResponseData<any>>,
+  session: Session
+) => void) {
   return async function (req: NextApiRequest, res: NextApiResponse<ApiResponseData<any>>) {
     const session = await getSession({req});
     if (session) {
