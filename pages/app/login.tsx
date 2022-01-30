@@ -3,9 +3,10 @@ import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
 import LoadingDots from "@/components/app/loading-dots";
+import {pageTitle} from "@/lib/helper";
 
 // TODO: 複数ヶ所でアプリタイトルを取得しているのでまとめる
-const pageTitle = "Login";
+const _pageTitle = pageTitle("Login");
 const logo = "/favicon.ico";
 const description =
   "Platforms Starter Kit is a comprehensive template for building multi-tenant applications with custom domains.";
@@ -16,7 +17,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <Head>
-        <title>{pageTitle}</title>
+        <title>{_pageTitle}</title>
         <link rel="icon" href={logo} />
         <link rel="shortcut icon" type="image/x-icon" href={logo} />
         <link rel="apple-touch-icon" sizes="180x180" href={logo} />
@@ -25,11 +26,11 @@ export default function Login() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <meta itemProp="name" content={pageTitle} />
+        <meta itemProp="name" content={_pageTitle} />
         <meta itemProp="description" content={description} />
         <meta itemProp="image" content={logo} />
         <meta name="description" content={description} />
-        <meta property="og:title" content={pageTitle} />
+        <meta property="og:title" content={_pageTitle} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={logo} />
         <meta property="og:type" content="website" />
@@ -37,7 +38,7 @@ export default function Login() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@Elegance" />
         <meta name="twitter:creator" content="@StevenTey" />
-        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:title" content={_pageTitle} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={logo} />
       </Head>
@@ -50,7 +51,7 @@ export default function Login() {
           height="48px"
         />
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sample App
+          Sample RSS Reader
         </h2>
       </div>
 
