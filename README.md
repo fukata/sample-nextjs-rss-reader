@@ -1,6 +1,8 @@
 # sample-nextjs-rss-reader
 
-これは、 [How to Build a Multi-Tenant App with Custom Domains Using Next.js – Vercel Docs](https://vercel.com/guides/nextjs-multi-tenant-application) を参考に作った RSS Reader です。
+これは下記の雛形を利用したサンプル（RSS Reader）アプリです。
+
+[fukata/skelton-nextjs-prisma-app](https://github.com/fukata/skelton-nextjs-prisma-app)
 
 ## 構成
 
