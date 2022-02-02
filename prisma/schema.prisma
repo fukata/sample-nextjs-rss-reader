@@ -102,6 +102,6 @@ model FeedItem {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   feed Feed @relation(fields: [feedId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, url])
+  @@unique([userId, feedId, guid])
   @@index([userId, feedId, publishedAt])
 }

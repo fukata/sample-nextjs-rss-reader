@@ -1,5 +1,6 @@
 import Modal from "react-modal";
 import { useState } from "react";
+import {Feed} from "@prisma/client";
 
 const customStyles = {
   content: {
@@ -16,7 +17,9 @@ const customStyles = {
  * フィード登録用のモーダル、登録処理を扱う
  * @constructor
  */
-export default function AddFeed() {
+export default function AddFeed(
+  {onSuccess} : {onSuccess: (feed: Feed) => void}
+) {
   const [feedUrl, setFeedUrl] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
@@ -41,6 +44,9 @@ export default function AddFeed() {
       }
     })).json();
     console.log(result);
+
+    onSuccess(result.data.feed);
+    closeModal();
   };
 
   return (
