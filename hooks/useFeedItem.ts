@@ -17,7 +17,7 @@ export const useFeedItem = () => {
       body: JSON.stringify({ feedId: feedId }),
       headers: { 'Content-Type': 'application/json' },
     })).json();
-    return resp.data.aggregatedNum;
+    return resp.data?.aggregatedNum ?? 0;
   };
 
   return {
