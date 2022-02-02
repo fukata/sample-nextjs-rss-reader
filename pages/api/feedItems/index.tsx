@@ -19,7 +19,8 @@ export async function FeedItemsIndexApi(
       userId: currentUser.id,
     },
     orderBy: [
-      { createdAt: 'desc' }
+      { publishedAt: 'desc' },
+      { createdAt: 'desc' },
     ]
   });
   return res.status(200).json({

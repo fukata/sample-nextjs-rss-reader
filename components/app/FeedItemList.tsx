@@ -11,7 +11,7 @@ export default function FeedItemList(
         { feedItems.map(item => (
           <li key={item.id}>
             <a href={item.url} target="_blank">
-              {item.title}
+              {item.publishedAt} {item.title}
             </a>
           </li>
         )) }
