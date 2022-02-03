@@ -7,7 +7,7 @@ import {useFeedItem} from "@/hooks/useFeedItem";
 import FeedItemList from "@/components/app/FeedItemList";
 
 export default function Index() {
-  const {feeds, reloadFeeds} = useFeed();
+  const {feeds, reloadFeeds, updateColorCode} = useFeed();
   const {feedItems, reloadFeedItems, aggregateFeed} = useFeedItem();
 
   const onSuccessAddFeed = async (feed: Feed) => {
@@ -19,6 +19,9 @@ export default function Index() {
     await aggregateFeed(feedId);
     await reloadFeedItems();
   };
+  const onChangeFeedColorCode = async (feedId: string, colorCode: string) => {
+    await updateColorCode(feedId, colorCode);
+  };
 
   return (
     <Layout>
@@ -27,7 +30,7 @@ export default function Index() {
           <div className="flex flex-col justify-between">
             <aside>
               <AddFeed onSuccess={onSuccessAddFeed} />
-              <FeedList feeds={feeds} onClickAggregateFeed={onClickAggregateFeed} />
+              <FeedList feeds={feeds} onClickAggregateFeed={onClickAggregateFeed} onChangeFeedColorCode={onChangeFeedColorCode} />
             </aside>
           </div>
         </div>
