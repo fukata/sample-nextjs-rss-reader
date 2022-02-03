@@ -1,11 +1,50 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {requireAuthApi} from "@/lib/api/requireAuthApi";
 import {Session} from "next-auth";
-import { fetchFeed } from "@/lib/api/feedFetcher";
+import {FetchedFeedData, fetchFeed} from "@/lib/api/feedFetcher";
 import prisma from "@/lib/prisma";
+import {Feed} from "@prisma/client";
 
 type ResponseData = {
   aggregatedNum: number;
+}
+
+export async function bulkRegisterFeedItems(currentUserId: string, feed: Feed, fetchedFeedData: FetchedFeedData) {
+  let aggregatedNum = 0;
+  for (let i=0; i<fetchedFeedData.items.length; i++) {
+    const item = fetchedFeedData.items[i];
+
+    const url = item.url;
+    if (!url) {
+      console.log('FeedItem is not have url. item=%o', item);
+      continue;
+    }
+
+    const existFeedItem = await prisma.feedItem.findFirst({
+      where: {
+        userId: currentUserId,
+        feedId: feed.id,
+        url: url,
+      }
+    });
+    if (existFeedItem) {
+      console.log('Already exists feedItem. feed=%o, feedItem=%o', feed.title, existFeedItem.title);
+      continue;
+    }
+
+    await prisma.feedItem.create({
+      data: {
+        userId: currentUserId,
+        feedId: feed.id,
+        title: item.title,
+        url: item.url,
+        publishedAt: item.publishedAt ? new Date(item.publishedAt) : new Date(),
+      }
+    });
+    aggregatedNum++;
+  }
+
+  return aggregatedNum;
 }
 
 export async function FeedsAggregateApi(
@@ -45,40 +84,7 @@ export async function FeedsAggregateApi(
   }
   try {
     const fechedFeed = await fetchFeed(feed.feedUrl);
-    let aggregatedNum = 0;
-    for (let i=0; i<fechedFeed.items.length; i++) {
-      const item = fechedFeed.items[i];
-
-      const guid = item.guid.length > 0 ? item.guid : item.url;
-      if (!guid) {
-        console.log('FeedItem is not have guid. item=%o', item);
-        continue;
-      }
-
-      const existFeedItem = await prisma.feedItem.findFirst({
-        where: {
-          userId: currentUser.id,
-          feedId: feed.id,
-          guid: guid,
-        }
-      });
-      if (existFeedItem) {
-        continue;
-      }
-
-      await prisma.feedItem.create({
-        data: {
-          guid: guid,
-          userId: currentUser.id,
-          feedId: feed.id,
-          title: item.title,
-          url: item.url,
-          publishedAt: item.publishedAt ? new Date(item.publishedAt) : new Date(),
-        }
-      });
-      aggregatedNum++;
-    }
-
+    let aggregatedNum = await bulkRegisterFeedItems(currentUser.id, feed, fechedFeed);
     return res.status(200).json({
       status: 'ok',
       data: {
@@ -86,6 +92,7 @@ export async function FeedsAggregateApi(
       }
     });
   } catch (e) {
+    console.log(e);
     return res.status(400).json({
       status: 'error',
       error: `Feedを取得出来ませんでした。URLを確認してください。`,

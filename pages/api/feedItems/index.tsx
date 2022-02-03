@@ -21,7 +21,10 @@ export async function FeedItemsIndexApi(
     orderBy: [
       { publishedAt: 'desc' },
       { createdAt: 'desc' },
-    ]
+    ],
+    include: {
+      feed: true
+    }
   });
   return res.status(200).json({
     status: 'ok',

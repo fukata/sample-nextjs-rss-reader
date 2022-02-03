@@ -1,7 +1,6 @@
 import Parser from "rss-parser";
 
 export type FechedFeedItem = {
-  guid: string;
   title: string;
   url: string;
   publishedAt?: string;
@@ -22,11 +21,10 @@ export async function fetchFeed(feedUrl: string): FetchedFeedData {
   return {
     title: feed.title ?? '',
     siteUrl: feed.link ?? '',
-    feedUrl: feed.feedUrl ?? '',
+    feedUrl: feedUrl,
     items: feed.items.map(item => {
       return {
-        guid: item.guid ?? '',
-        title: item.title ?? '',
+        title: item.title?.slice(0, 150) ?? '',
         url: item.link ?? '',
         publishedAt: item.pubDate,
       };

@@ -4,6 +4,8 @@ import {Session} from "next-auth";
 import type { Feed } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import {fetchFeed} from "@/lib/api/feedFetcher";
+import {pickColor} from "@/lib/colors";
+import {bulkRegisterFeedItems} from "./aggregate";
 
 type ResponseData = {
   feed: Feed;
@@ -41,11 +43,11 @@ export async function FeedsCreateApi(
     });
   }
 
-  let fetchResult;
+  let fetchedFeed;
   try {
     console.log(`Not exists feed. feedUrl=${feedUrl}`);
-    fetchResult = await fetchFeed(feedUrl);
-    console.log(`fetchResult=%o`, fetchResult);
+    fetchedFeed = await fetchFeed(feedUrl);
+    console.log(`fetchedFeed=%o`, fetchedFeed);
   } catch (e) {
     return res.status(400).json({
       status: 'error',
@@ -56,11 +58,13 @@ export async function FeedsCreateApi(
   const feed = await prisma.feed.create({
     data: {
       userId: currentUser.id,
-      title: fetchResult.title,
-      siteUrl: fetchResult.siteUrl,
-      feedUrl: fetchResult.feedUrl,
+      title: fetchedFeed.title,
+      siteUrl: fetchedFeed.siteUrl,
+      feedUrl: fetchedFeed.feedUrl,
+      colorCode: pickColor(),
     }
   });
+  await bulkRegisterFeedItems(currentUser.id, feed, fetchedFeed);
   return res.status(200).json({
     status: 'ok',
     data: {

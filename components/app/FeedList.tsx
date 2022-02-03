@@ -14,9 +14,13 @@ export default function FeedList(
     <div>
       <h2 className="text-xl">Your feeds</h2>
       <UpdateFeedItem feeds={feeds} onClick={onClickAggregateFeed} />
-      <ul>
+      <ul className="mt-2">
         { feeds.map(feed => (
-          <li key={feed.id}>
+          <li
+            key={feed.id}
+            className="mb-1 px-1 text-white truncate"
+            style={{backgroundColor: feed.colorCode}}
+          >
             {feed.title}
           </li>
         )) }

@@ -8,7 +8,7 @@ export const useFeed = () => {
 
   const reloadFeeds = async () => {
     const resp = await (await fetch(`/api/feeds`)).json();
-    setFeeds(resp.data.feeds);
+    setFeeds(resp.data?.feeds ?? []);
   };
 
   return {

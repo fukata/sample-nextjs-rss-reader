@@ -1,21 +1,27 @@
 import {FeedItem} from "@prisma/client";
-import Link from "next/link";
+import format from "date-fns/format";
 
 export default function FeedItemList(
   { feedItems } : { feedItems: FeedItem[] }
 ) {
   return (
     <div>
-      <h2 className="text-xl">Your feed items</h2>
-      <ul>
+      <div className="grid grid-cols-1 divide-y">
         { feedItems.map(item => (
-          <li key={item.id}>
+          <div key={item.id} className="p-1">
+            <span className="mr-2">{format(new Date(item.publishedAt), "yyyy-MM-dd")}:</span>
+            <span
+              className="mr-2 px-1 text-white inline-block w-24 truncate"
+              style={{backgroundColor: item.feed.colorCode}}
+            >
+              {item.feed.title}
+            </span>
             <a href={item.url} target="_blank">
-              {item.publishedAt} {item.title}
+              {item.title}
             </a>
-          </li>
+          </div>
         )) }
-      </ul>
+      </div>
     </div>
   );
 }

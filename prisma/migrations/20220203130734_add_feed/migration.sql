@@ -5,6 +5,7 @@ CREATE TABLE `Feed` (
     `title` VARCHAR(191) NOT NULL,
     `siteUrl` VARCHAR(191) NOT NULL,
     `feedUrl` VARCHAR(191) NOT NULL,
+    `colorCode` VARCHAR(191) NOT NULL,
     `checkedAt` DATETIME(3) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -17,7 +18,6 @@ CREATE TABLE `Feed` (
 -- CreateTable
 CREATE TABLE `FeedItem` (
     `id` VARCHAR(191) NOT NULL,
-    `guid` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `feedId` VARCHAR(191) NOT NULL,
     `title` VARCHAR(191) NOT NULL,
@@ -29,6 +29,6 @@ CREATE TABLE `FeedItem` (
     `updatedAt` DATETIME(3) NOT NULL,
 
     INDEX `FeedItem_userId_feedId_publishedAt_idx`(`userId`, `feedId`, `publishedAt`),
-    UNIQUE INDEX `FeedItem_userId_feedId_guid_key`(`userId`, `feedId`, `guid`),
+    UNIQUE INDEX `FeedItem_userId_feedId_url_key`(`userId`, `feedId`, `url`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

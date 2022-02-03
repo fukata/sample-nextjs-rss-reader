@@ -74,6 +74,7 @@ model Feed {
   title     String
   siteUrl   String
   feedUrl   String
+  colorCode String
   checkedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -88,7 +89,6 @@ model Feed {
 
 model FeedItem {
   id          String    @id @default(cuid())
-  guid        String
   userId      String
   feedId      String
   title       String
@@ -102,6 +102,6 @@ model FeedItem {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   feed Feed @relation(fields: [feedId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, feedId, guid])
+  @@unique([userId, feedId, url])
   @@index([userId, feedId, publishedAt])
 }

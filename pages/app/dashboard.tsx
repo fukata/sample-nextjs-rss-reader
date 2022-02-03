@@ -12,6 +12,7 @@ export default function Index() {
 
   const onSuccessAddFeed = async (feed: Feed) => {
     await reloadFeeds();
+    await reloadFeedItems();
   };
 
   const onClickAggregateFeed = async (feedId: string) => {
@@ -21,12 +22,19 @@ export default function Index() {
 
   return (
     <Layout>
-      <h1>Dashboard</h1>
-
-      <AddFeed onSuccess={onSuccessAddFeed} />
-
-      <FeedList feeds={feeds} onClickAggregateFeed={onClickAggregateFeed} />
-      <FeedItemList feedItems={feedItems} />
+      <div className="flex">
+        <div className="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto border-r">
+          <div className="flex flex-col justify-between">
+            <aside>
+              <AddFeed onSuccess={onSuccessAddFeed} />
+              <FeedList feeds={feeds} onClickAggregateFeed={onClickAggregateFeed} />
+            </aside>
+          </div>
+        </div>
+        <div className="w-full h-full p-2 overflow-y-auto">
+          <FeedItemList feedItems={feedItems} />
+        </div>
+      </div>
     </Layout>
   );
 }
