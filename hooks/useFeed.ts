@@ -12,6 +12,7 @@ export const useFeed = () => {
   };
 
   const updateColorCode = async (feedId: string, colorCode: string) => {
+    console.log('updateColorCode');
     const feed = feeds.find(f => f.id === feedId);
     if (feed) {
       feed.colorCode = colorCode;

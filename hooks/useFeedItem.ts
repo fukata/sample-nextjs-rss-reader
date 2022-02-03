@@ -20,9 +20,18 @@ export const useFeedItem = () => {
     return resp.data?.aggregatedNum ?? 0;
   };
 
+  const updateFeedColorCode = async (feedId: string, colorCode: string) => {
+    console.log('updateFeedColorCode');
+    feedItems.filter(f => f.feedId === feedId).forEach(f => {
+      f.feed.colorCode = colorCode;
+    })
+    setFeedItems([...feedItems]);
+  };
+
   return {
     feedItems,
     reloadFeedItems,
     aggregateFeed,
+    updateFeedColorCode,
   }
 };

@@ -8,7 +8,7 @@ import FeedItemList from "@/components/app/FeedItemList";
 
 export default function Index() {
   const {feeds, reloadFeeds, updateColorCode} = useFeed();
-  const {feedItems, reloadFeedItems, aggregateFeed} = useFeedItem();
+  const {feedItems, reloadFeedItems, aggregateFeed, updateFeedColorCode} = useFeedItem();
 
   const onSuccessAddFeed = async (feed: Feed) => {
     await reloadFeeds();
@@ -21,6 +21,7 @@ export default function Index() {
   };
   const onChangeFeedColorCode = async (feedId: string, colorCode: string) => {
     await updateColorCode(feedId, colorCode);
+    await updateFeedColorCode(feedId, colorCode);
   };
 
   return (
