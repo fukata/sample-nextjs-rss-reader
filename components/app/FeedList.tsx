@@ -1,5 +1,6 @@
 import {Feed} from "@prisma/client";
 import UpdateFeedItem from "@/components/app/UpdateFeedItem";
+import {textColorCodeFromBgColor} from "@/lib/colors";
 
 export default function FeedList(
   {
@@ -18,8 +19,8 @@ export default function FeedList(
         { feeds.map(feed => (
           <li
             key={feed.id}
-            className="mb-1 px-1 text-white truncate"
-            style={{backgroundColor: feed.colorCode}}
+            className="mb-1 px-1 truncate"
+            style={{backgroundColor: feed.colorCode, color: textColorCodeFromBgColor(feed.colorCode)}}
           >
             {feed.title}
           </li>
