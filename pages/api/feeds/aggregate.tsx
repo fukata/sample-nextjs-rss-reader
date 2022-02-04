@@ -33,7 +33,7 @@ export async function bulkRegisterFeedItems(currentUserId: string, feed: Feed, f
       continue;
     }
 
-    const feedItem = await prisma.feedItem.create({
+    const createdFeedItem = await prisma.feedItem.create({
       data: {
         userId: currentUserId,
         feedId: feed.id,
@@ -42,6 +42,16 @@ export async function bulkRegisterFeedItems(currentUserId: string, feed: Feed, f
         publishedAt: item.publishedAt ? new Date(item.publishedAt) : new Date(),
       }
     });
+
+    // feedを補完するために再取得する
+    const feedItem = await prisma.feedItem.findUnique({
+      where: {
+        id: createdFeedItem.id,
+      },
+      include: {
+        feed: true,
+      }
+    })
     newFeedItems.push(feedItem);
   }
 
