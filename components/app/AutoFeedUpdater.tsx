@@ -20,11 +20,14 @@ export default function AutoFeedUpdater(
       const interval = parseInt(selectedOption.target.value, 10);
       if (interval >= 300) {
         setAutoUpdateInterval(interval);
+        setRemainingSeconds(interval);
       } else {
         setAutoUpdateInterval(0);
+        setRemainingSeconds(-1);
       }
     } else {
       setAutoUpdateInterval(0);
+      setRemainingSeconds(-1);
     }
   };
 
