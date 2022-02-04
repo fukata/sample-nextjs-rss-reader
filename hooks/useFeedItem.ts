@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {FeedItem} from "@prisma/client";
 
 export const useFeedItem = () => {
   const [feedItems, setFeedItems] = useState([]);
@@ -11,13 +12,17 @@ export const useFeedItem = () => {
     setFeedItems(resp.data?.feedItems ?? []);
   };
 
+  const prependFeedItems = (newFeedItems: FeedItem[]) => {
+    setFeedItems([...newFeedItems, ...feedItems]);
+  };
+
   const aggregateFeed = async (feedId: string) => {
     const resp = await (await fetch(`/api/feeds/aggregate`, {
       method: 'POST',
       body: JSON.stringify({ feedId: feedId }),
       headers: { 'Content-Type': 'application/json' },
     })).json();
-    return resp.data?.aggregatedNum ?? 0;
+    return resp.data?.feedItems ?? [];
   };
 
   const updateFeedColorCode = async (feedId: string, colorCode: string) => {
@@ -31,6 +36,7 @@ export const useFeedItem = () => {
   return {
     feedItems,
     reloadFeedItems,
+    prependFeedItems,
     aggregateFeed,
     updateFeedColorCode,
   }

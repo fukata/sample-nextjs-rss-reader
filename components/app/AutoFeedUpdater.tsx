@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import format from "date-fns/format";
 
-const defaultOptionValue = 300;
+const defaultOptionValue = 3600;
 const options = [
   { label: "自動更新：5分毎", value: "300" },
   { label: "自動更新：1時間毎", value: "3600" },
@@ -13,6 +13,7 @@ export default function AutoFeedUpdater(
 ) {
   const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null);
   const [autoUpdateInterval, setAutoUpdateInterval] = useState<number>(defaultOptionValue);
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(defaultOptionValue);
 
   const handleChange = (selectedOption) => {
     if (selectedOption.target.value.length > 0) {
@@ -29,27 +30,40 @@ export default function AutoFeedUpdater(
 
   useEffect(() => {
     if (autoUpdateInterval > 0) {
-      const timer = setInterval(async () => {
+      const autoUpdateTimer = setInterval(async () => {
         console.log('AutoFeedUpdate:', new Date());
         await onAutoUpdate();
+
         setLastUpdatedAt(new Date());
+        setRemainingSeconds(autoUpdateInterval);
       }, autoUpdateInterval * 1000);
 
+      const progressTimer = setInterval(() => {
+        setRemainingSeconds((prevRemainingSeconds) => prevRemainingSeconds - 1);
+      }, 1000);
+
       return () => {
-        clearInterval(timer);
+        clearInterval(progressTimer);
+        clearInterval(autoUpdateTimer);
       };
     }
   }, [autoUpdateInterval]);
 
   return (
     <div className="mb-2">
-      <select onChange={handleChange}>
+      <select onChange={handleChange} value={`${autoUpdateInterval}`}>
         { options.map(o => (
           <option value={o.value} key={o.label}>
             {o.label}
           </option>
         )) }
       </select>
+
+      <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+        { remainingSeconds > -1 ? (
+          <div className="bg-blue-600 h-2.5 rounded-full" style={{width: `${ Math.floor(100 - ((autoUpdateInterval - remainingSeconds) / autoUpdateInterval) * 100) }%`}} />
+        ) : null }
+      </div>
 
       {
         lastUpdatedAt != null ? (

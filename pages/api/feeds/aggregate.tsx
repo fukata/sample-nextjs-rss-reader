@@ -3,14 +3,15 @@ import {requireAuthApi} from "@/lib/api/requireAuthApi";
 import {Session} from "next-auth";
 import {FetchedFeedData, fetchFeed} from "@/lib/api/feedFetcher";
 import prisma from "@/lib/prisma";
-import {Feed} from "@prisma/client";
+import {Feed, FeedItem} from "@prisma/client";
 
 type ResponseData = {
-  aggregatedNum: number;
+  feedItems: FeedItem[];
 }
 
 export async function bulkRegisterFeedItems(currentUserId: string, feed: Feed, fetchedFeedData: FetchedFeedData) {
-  let aggregatedNum = 0;
+  const newFeedItems: FeedItem[] = [];
+
   for (let i=0; i<fetchedFeedData.items.length; i++) {
     const item = fetchedFeedData.items[i];
 
@@ -32,7 +33,7 @@ export async function bulkRegisterFeedItems(currentUserId: string, feed: Feed, f
       continue;
     }
 
-    await prisma.feedItem.create({
+    const feedItem = await prisma.feedItem.create({
       data: {
         userId: currentUserId,
         feedId: feed.id,
@@ -41,10 +42,10 @@ export async function bulkRegisterFeedItems(currentUserId: string, feed: Feed, f
         publishedAt: item.publishedAt ? new Date(item.publishedAt) : new Date(),
       }
     });
-    aggregatedNum++;
+    newFeedItems.push(feedItem);
   }
 
-  return aggregatedNum;
+  return newFeedItems;
 }
 
 export async function FeedsAggregateApi(
@@ -84,11 +85,22 @@ export async function FeedsAggregateApi(
   }
   try {
     const fechedFeed = await fetchFeed(feed.feedUrl);
-    let aggregatedNum = await bulkRegisterFeedItems(currentUser.id, feed, fechedFeed);
+    const newFeedItems = await bulkRegisterFeedItems(currentUser.id, feed, fechedFeed);
+
+    // 最終確認日時を更新
+    await prisma.feed.update({
+      where: {
+        id: feed.id,
+      },
+      data: {
+        checkedAt: new Date(),
+      }
+    });
+
     return res.status(200).json({
       status: 'ok',
       data: {
-        aggregatedNum: aggregatedNum,
+        feedItems: newFeedItems,
       }
     });
   } catch (e) {

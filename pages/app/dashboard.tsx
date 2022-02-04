@@ -9,7 +9,7 @@ import AutoFeedUpdater from "@/components/app/AutoFeedUpdater";
 
 export default function Index() {
   const {feeds, reloadFeeds, updateColorCode} = useFeed();
-  const {feedItems, reloadFeedItems, aggregateFeed, updateFeedColorCode} = useFeedItem();
+  const {feedItems, reloadFeedItems, prependFeedItems, aggregateFeed, updateFeedColorCode} = useFeedItem();
 
   const onSuccessAddFeed = async (feed: Feed) => {
     await reloadFeeds();
@@ -26,7 +26,8 @@ export default function Index() {
   };
   const onAutoFeedUpdate = async () => {
     for (let i=0; i<feeds.length; i++) {
-      await aggregateFeed(feeds[i].id);
+      const feedItems = await aggregateFeed(feeds[i].id);
+      prependFeedItems(feedItems);
     }
     await reloadFeedItems();
   };
