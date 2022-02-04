@@ -9,15 +9,22 @@ export default function FeedItemList(
     <div>
       <div className="grid grid-cols-1 divide-y">
         { feedItems.map(item => (
-          <div key={item.id} className="p-1">
-            <span className="mr-2">{format(new Date(item.publishedAt), "yyyy-MM-dd")}:</span>
+          <div key={item.id} className="p-1 h-9 overflow-hidden">
+            <span
+              className="mr-2 inline-block w-24"
+            >
+              {format(new Date(item.publishedAt), "yyyy-MM-dd")}:
+            </span>
             <span
               className="mr-2 px-1 inline-block w-24 truncate"
               style={{backgroundColor: item.feed.colorCode, color: textColorCodeFromBgColor(item.feed.colorCode)}}
             >
               {item.feed.title}
             </span>
-            <a href={item.url} target="_blank">
+            <a
+              href={item.url}
+              target="_blank"
+            >
               {item.title}
             </a>
           </div>
