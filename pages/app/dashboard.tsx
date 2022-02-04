@@ -5,6 +5,7 @@ import {Feed} from "@prisma/client";
 import {useFeed} from "@/hooks/useFeed";
 import {useFeedItem} from "@/hooks/useFeedItem";
 import FeedItemList from "@/components/app/FeedItemList";
+import AutoFeedUpdater from "@/components/app/AutoFeedUpdater";
 
 export default function Index() {
   const {feeds, reloadFeeds, updateColorCode} = useFeed();
@@ -23,6 +24,12 @@ export default function Index() {
     await updateColorCode(feedId, colorCode);
     await updateFeedColorCode(feedId, colorCode);
   };
+  const onAutoFeedUpdate = async () => {
+    for (let i=0; i<feeds.length; i++) {
+      await aggregateFeed(feeds[i].id);
+    }
+    await reloadFeedItems();
+  };
 
   return (
     <Layout>
@@ -30,6 +37,7 @@ export default function Index() {
         <div className="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto border-r">
           <div className="flex flex-col justify-between">
             <aside>
+              <AutoFeedUpdater onAutoUpdate={onAutoFeedUpdate} />
               <AddFeed onSuccess={onSuccessAddFeed} />
               <FeedList feeds={feeds} onClickAggregateFeed={onClickAggregateFeed} onChangeFeedColorCode={onChangeFeedColorCode} />
             </aside>

@@ -57,7 +57,7 @@ export default function FeedList(
   };
 
   return (
-    <div>
+    <div className="mb-2">
       <h2 className="text-xl">Your feeds</h2>
       <UpdateFeedItem feeds={feeds} onClick={onClickAggregateFeed} />
       <ul className="mt-2">
