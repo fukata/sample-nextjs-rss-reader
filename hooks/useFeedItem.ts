@@ -3,6 +3,8 @@ import {FeedItem} from "@prisma/client";
 
 export const useFeedItem = () => {
   const [feedItems, setFeedItems] = useState([]);
+  const [nextPage, setNextPage] = useState<number | null>(2);
+
   useEffect(() => {
     reloadFeedItems();
   }, [])
@@ -33,11 +35,30 @@ export const useFeedItem = () => {
     setFeedItems([...feedItems]);
   };
 
+  const loadMoreFeedItems = async () : Promise<LoadMoreResult> => {
+    const resp = await (await fetch(`/api/feedItems?page=${nextPage}`)).json();
+    if (resp.data?.pagination && resp.data?.pagination.nextPage) {
+      setNextPage(resp.data?.pagination.nextPage);
+    }
+
+    // 重複排除
+    const existsFeedItemMap : { id : boolean } = {};
+    feedItems.forEach(item => existsFeedItemMap[item.id] = true );
+    const newFeedItems = (resp.data?.feedItems ?? []).filter(item => !existsFeedItemMap[item.id]);
+
+    setFeedItems([...feedItems, ...newFeedItems]);
+
+    return {
+      hasMore: nextPage != null,
+    };
+  };
+
   return {
     feedItems,
     reloadFeedItems,
     prependFeedItems,
     aggregateFeed,
     updateFeedColorCode,
+    loadMoreFeedItems,
   }
 };

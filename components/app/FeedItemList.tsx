@@ -1,9 +1,17 @@
 import {FeedItem} from "@prisma/client";
 import format from "date-fns/format";
 import {textColorCodeFromBgColor} from "@/lib/colors";
+import {useState} from "react";
+import {LoadMore} from "@/components/app/LoadMore";
 
 export default function FeedItemList(
-  { feedItems } : { feedItems: FeedItem[] }
+  {
+    feedItems,
+    onLoadMore,
+  } : {
+    feedItems: FeedItem[],
+    onLoadMore: () => Promise<LoadMoreResult>,
+  }
 ) {
   return (
     <div>
@@ -30,6 +38,8 @@ export default function FeedItemList(
           </div>
         )) }
       </div>
+
+      <LoadMore onLoadMore={onLoadMore} />
     </div>
   );
 }

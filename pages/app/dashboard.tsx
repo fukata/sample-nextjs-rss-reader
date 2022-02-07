@@ -9,7 +9,14 @@ import AutoFeedUpdater from "@/components/app/AutoFeedUpdater";
 
 export default function Index() {
   const {feeds, reloadFeeds, updateColorCode} = useFeed();
-  const {feedItems, reloadFeedItems, prependFeedItems, aggregateFeed, updateFeedColorCode} = useFeedItem();
+  const {
+    feedItems,
+    reloadFeedItems,
+    prependFeedItems,
+    aggregateFeed,
+    updateFeedColorCode,
+    loadMoreFeedItems
+  } = useFeedItem();
 
   const onSuccessAddFeed = async (feed: Feed) => {
     await reloadFeeds();
@@ -31,6 +38,9 @@ export default function Index() {
     }
     await reloadFeedItems();
   };
+  const onLoadMoreFeedItems = async () : Promise<LoadMoreResult> => {
+    return await loadMoreFeedItems();
+  };
 
   return (
     <Layout>
@@ -40,12 +50,19 @@ export default function Index() {
             <aside>
               <AutoFeedUpdater onAutoUpdate={onAutoFeedUpdate} />
               <AddFeed onSuccess={onSuccessAddFeed} />
-              <FeedList feeds={feeds} onClickAggregateFeed={onClickAggregateFeed} onChangeFeedColorCode={onChangeFeedColorCode} />
+              <FeedList
+                feeds={feeds}
+                onClickAggregateFeed={onClickAggregateFeed}
+                onChangeFeedColorCode={onChangeFeedColorCode}
+              />
             </aside>
           </div>
         </div>
         <div className="w-full h-full p-2 overflow-y-auto">
-          <FeedItemList feedItems={feedItems} />
+          <FeedItemList
+            feedItems={feedItems}
+            onLoadMore={onLoadMoreFeedItems}
+          />
         </div>
       </div>
     </Layout>
