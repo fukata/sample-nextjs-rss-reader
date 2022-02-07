@@ -48,21 +48,30 @@ export default function Index() {
         <div className="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto border-r">
           <div className="flex flex-col justify-between">
             <aside>
-              <AutoFeedUpdater onAutoUpdate={onAutoFeedUpdate} />
               <AddFeed onSuccess={onSuccessAddFeed} />
-              <FeedList
-                feeds={feeds}
-                onClickAggregateFeed={onClickAggregateFeed}
-                onChangeFeedColorCode={onChangeFeedColorCode}
-              />
+              { feeds.length > 0 && (
+                  <>
+                    <AutoFeedUpdater onAutoUpdate={onAutoFeedUpdate} />
+                    <FeedList
+                      feeds={feeds}
+                      onClickAggregateFeed={onClickAggregateFeed}
+                      onChangeFeedColorCode={onChangeFeedColorCode}
+                    />
+                  </>
+                )
+              }
             </aside>
           </div>
         </div>
         <div className="w-full h-full p-2 overflow-y-auto">
-          <FeedItemList
-            feedItems={feedItems}
-            onLoadMore={onLoadMoreFeedItems}
-          />
+          { feeds.length > 0 ?
+            <FeedItemList
+              feedItems={feedItems}
+              onLoadMore={onLoadMoreFeedItems}
+            />
+            :
+            <p>アイテムがありません。RSSを追加してください。</p>
+          }
         </div>
       </div>
     </Layout>

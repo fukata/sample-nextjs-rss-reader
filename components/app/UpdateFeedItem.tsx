@@ -26,7 +26,7 @@ export default function UpdateFeedItem(
   return (
     <div>
       <button
-        className={`py-2 px-4 rounded ${loading ? "bg-gray-200 text-black" : "bg-blue-500 text-white hover:bg-blue-700"}`}
+        className={`w-full py-2 px-4 rounded ${loading ? "bg-gray-200 text-black" : "bg-blue-500 text-white hover:bg-blue-700"}`}
         onClick={aggregate}
         disabled={loading}
       >
@@ -35,7 +35,7 @@ export default function UpdateFeedItem(
             <LoadingIcon />&nbsp;
           </>
         ) : null }
-        Update FeedItem
+        RSSを再取得
       </button>
     </div>
   );

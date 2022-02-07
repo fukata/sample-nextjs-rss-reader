@@ -71,7 +71,6 @@ export default function FeedList(
 
   return (
     <div className="mb-2">
-      <h2 className="text-xl">Your feeds</h2>
       <UpdateFeedItem feeds={feeds} onClick={onUpdateFeed} />
       <ul className="mt-2">
         { feeds.map(feed => (
