@@ -1,4 +1,5 @@
 import {useState} from "react";
+import LoadingIcon from "@/components/icon/LoadingIcon";
 
 export function LoadMore(
   {
@@ -36,7 +37,11 @@ export function LoadMore(
           disabled={loading}
           onClick={handleLoadMore}
         >
-          {loading ? "読み込み中..." : "もっと読む"}
+          {loading ? (
+            <span>
+              読み込み中&nbsp;<LoadingIcon />
+            </span>
+          ) : "もっと読む"}
         </button>
       }
     </div>

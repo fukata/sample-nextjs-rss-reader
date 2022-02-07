@@ -42,7 +42,7 @@ export const useFeedItem = () => {
     }
 
     // 重複排除
-    const existsFeedItemMap : { id : boolean } = {};
+    const existsFeedItemMap : { [key: string] : boolean } = {};
     feedItems.forEach(item => existsFeedItemMap[item.id] = true );
     const newFeedItems = (resp.data?.feedItems ?? []).filter(item => !existsFeedItemMap[item.id]);
 

@@ -2,6 +2,7 @@ import {Feed} from "@prisma/client";
 import UpdateFeedItem from "@/components/app/UpdateFeedItem";
 import {ColorResult, TwitterPicker} from "react-color";
 import {CSSProperties, useState} from "react";
+import LoadingIcon from "@/components/icon/LoadingIcon";
 
 export default function FeedList(
   {
@@ -14,6 +15,18 @@ export default function FeedList(
     onChangeFeedColorCode: (feedId: string, colorCode: string) => void,
   }
 ) {
+  // 各フィードの更新中ステータス id:boolean
+  const [feedLoadingStatuses, setFeedLoadingStatuses] = useState<{ [key: string]: boolean }>({});
+  const onUpdateFeed = async (feedId: string) => {
+    try {
+      setFeedLoadingStatuses({ ...feedLoadingStatuses, [feedId]: true });
+      await onClickAggregateFeed(feedId);
+    } finally {
+      setFeedLoadingStatuses({ ...feedLoadingStatuses, [feedId]: false });
+    }
+  }
+
+  // TODO: Feedの ColorPicker をコンポーネント化できないか
   const [displayColorPicker, setDisplayColorPicker] = useState<{
     display: boolean;
     posX: number;
@@ -26,7 +39,7 @@ export default function FeedList(
     feed: null,
   });
 
-  const handleClick = (feed: Feed) => {
+  const handleFeedColorClick = (feed: Feed) => {
     setDisplayColorPicker({
       display: true,
       posX: event.target.offsetLeft - event.target.offsetWidth / 2,
@@ -34,12 +47,12 @@ export default function FeedList(
       feed: feed,
     });
   };
-  const handleClose = () => {
+  const handleFeedColorClose = () => {
     setDisplayColorPicker({ display: false, posX: 0, posY: 0, feed: null });
   };
-  const handleChange = (color: ColorResult) => {
+  const handleFeedColorChange = (color: ColorResult) => {
     onChangeFeedColorCode(displayColorPicker.feed.id, color.hex);
-    handleClose();
+    handleFeedColorClose();
   };
 
   const popover: CSSProperties = {
@@ -59,7 +72,7 @@ export default function FeedList(
   return (
     <div className="mb-2">
       <h2 className="text-xl">Your feeds</h2>
-      <UpdateFeedItem feeds={feeds} onClick={onClickAggregateFeed} />
+      <UpdateFeedItem feeds={feeds} onClick={onUpdateFeed} />
       <ul className="mt-2">
         { feeds.map(feed => (
           <li
@@ -69,17 +82,22 @@ export default function FeedList(
             <button
               className="border-2 w-5 h-5 inline-block"
               style={{backgroundColor: feed.colorCode}}
-              onClick={() => {handleClick(feed)}}
+              onClick={() => {handleFeedColorClick(feed)}}
             />
             <span className="px-1 w-40 inline-block truncate">
+              { feedLoadingStatuses[feed.id] ? (
+                <>
+                  <LoadingIcon />&nbsp;
+                </>
+              ): null }
               {feed.title}
             </span>
           </li>
         )) }
       </ul>
       { displayColorPicker.display ? <div style={popover}>
-        <div style={cover} onClick={handleClose} />
-        <TwitterPicker onChangeComplete={handleChange} />
+        <div style={cover} onClick={handleFeedColorClose} />
+        <TwitterPicker onChangeComplete={handleFeedColorChange} />
       </div> : null }
     </div>
   );

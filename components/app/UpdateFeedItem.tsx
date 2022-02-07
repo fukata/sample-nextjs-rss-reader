@@ -1,4 +1,6 @@
 import {Feed} from "@prisma/client";
+import {useState} from "react";
+import LoadingIcon from "@/components/icon/LoadingIcon";
 
 export default function UpdateFeedItem(
   {
@@ -9,17 +11,30 @@ export default function UpdateFeedItem(
     onClick: (feedId: string) => void,
   }
 ) {
+  const [loading, setLoading] = useState(false);
+
   const aggregate = async () => {
-    for (let i=0; i<feeds.length; i++) {
-      await onClick(feeds[i].id);
+    try {
+      setLoading(true);
+      for (let i=0; i<feeds.length; i++) {
+        await onClick(feeds[i].id);
+      }
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <div>
       <button
-        className="font-bold py-2 px-4 rounded bg-blue-500 text-white hover:bg-blue-700"
+        className={`py-2 px-4 rounded ${loading ? "bg-gray-200 text-black" : "bg-blue-500 text-white hover:bg-blue-700"}`}
         onClick={aggregate}
+        disabled={loading}
       >
+        { loading ? (
+          <>
+            <LoadingIcon />&nbsp;
+          </>
+        ) : null }
         Update FeedItem
       </button>
     </div>
