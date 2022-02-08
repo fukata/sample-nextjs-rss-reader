@@ -11,7 +11,7 @@ export async function FeedsCreateApi(
   res: NextApiResponse<ApiResponseData<ResponseData>>,
   session: Session
 ) {
-  const currentUser = session.user;
+  const currentUser = session.user!;
 
   if (req.method !== 'PUT') {
     return res.status(400).json({
@@ -39,12 +39,12 @@ export async function FeedsCreateApi(
 
   const existFeed = await prisma.feed.findFirst({
     where: {
-      userId: currentUser.id,
+      userId: currentUser.id as string,
       id: feedId,
     }
   });
   if (!existFeed) {
-    console.log(`Not exists feed. feedUrl=${feedUrl}`);
+    console.log(`Not exists feed. feedId=${feedId}`);
     return res.status(404).json({
       status: 'error',
       error: `feedが見つかりませんでした。`,

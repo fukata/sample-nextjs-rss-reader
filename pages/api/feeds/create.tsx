@@ -16,7 +16,7 @@ export async function FeedsCreateApi(
   res: NextApiResponse<ApiResponseData<ResponseData>>,
   session: Session
 ) {
-  const currentUser = session.user;
+  const currentUser = session.user!;
 
   console.log(`body=%o`, req.body);
   const feedUrl = req.body.feedUrl;
@@ -29,7 +29,7 @@ export async function FeedsCreateApi(
 
   const existFeed = await prisma.feed.findFirst({
     where: {
-      userId: currentUser.id,
+      userId: currentUser.id as string,
       feedUrl: feedUrl,
     }
   });
@@ -57,14 +57,14 @@ export async function FeedsCreateApi(
 
   const feed = await prisma.feed.create({
     data: {
-      userId: currentUser.id,
+      userId: currentUser.id as string,
       title: fetchedFeed.title,
       siteUrl: fetchedFeed.siteUrl,
       feedUrl: fetchedFeed.feedUrl,
       colorCode: pickColor(),
     }
   });
-  await bulkRegisterFeedItems(currentUser.id, feed, fetchedFeed);
+  await bulkRegisterFeedItems(currentUser.id as string, feed, fetchedFeed);
   return res.status(200).json({
     status: 'ok',
     data: {

@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
+import {Feed} from "@prisma/client";
 
 export const useFeed = () => {
-  const [feeds, setFeeds] = useState([]);
+  const [feeds, setFeeds] = useState<Feed[]>([]);
   useEffect(() => {
     reloadFeeds();
   }, [])
@@ -13,7 +14,7 @@ export const useFeed = () => {
 
   const updateColorCode = async (feedId: string, colorCode: string) => {
     console.log('updateColorCode');
-    const feed = feeds.find(f => f.id === feedId);
+    const feed = feeds.find((f: Feed) => f.id === feedId);
     if (feed) {
       feed.colorCode = colorCode;
       setFeeds(feeds);

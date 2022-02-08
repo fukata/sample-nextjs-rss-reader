@@ -15,7 +15,7 @@ export type FetchedFeedData = {
 
 const parser = new Parser();
 
-export async function fetchFeed(feedUrl: string): FetchedFeedData {
+export async function fetchFeed(feedUrl: string): Promise<FetchedFeedData> {
   const feed = await parser.parseURL(feedUrl);
 
   return {

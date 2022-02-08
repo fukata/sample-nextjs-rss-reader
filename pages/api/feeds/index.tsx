@@ -13,10 +13,10 @@ export async function FeedsIndexApi(
   res: NextApiResponse<ApiResponseData<ResponseData>>,
   session: Session
 ) {
-  const currentUser = session.user;
+  const currentUser = session.user!;
   const feeds = await prisma.feed.findMany({
     where: {
-      userId: currentUser.id,
+      userId: currentUser.id as string,
     },
     orderBy: [
       { createdAt: 'desc' }

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import format from "date-fns/format";
 
 const defaultOptionValue = 3600;
@@ -15,9 +15,9 @@ export default function AutoFeedUpdater(
   const [autoUpdateInterval, setAutoUpdateInterval] = useState<number>(defaultOptionValue);
   const [remainingSeconds, setRemainingSeconds] = useState<number>(defaultOptionValue);
 
-  const handleChange = (selectedOption) => {
-    if (selectedOption.target.value.length > 0) {
-      const interval = parseInt(selectedOption.target.value, 10);
+  const handleChange = (ev: ChangeEvent<HTMLSelectElement>) => {
+    if (ev.target.value.length > 0) {
+      const interval = parseInt(ev.target.value, 10);
       if (interval >= 300) {
         setAutoUpdateInterval(interval);
         setRemainingSeconds(interval);

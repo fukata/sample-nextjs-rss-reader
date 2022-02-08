@@ -1,7 +1,7 @@
 import {Feed} from "@prisma/client";
 import UpdateFeedItem from "@/components/app/UpdateFeedItem";
 import {ColorResult, TwitterPicker} from "react-color";
-import {CSSProperties, useState} from "react";
+import {MouseEvent, CSSProperties, useState} from "react";
 import LoadingIcon from "@/components/icon/LoadingIcon";
 
 export default function FeedList(
@@ -31,27 +31,27 @@ export default function FeedList(
     display: boolean;
     posX: number;
     posY: number;
-    feed: Feed | null;
+    feedId: string | null;
   }>({
     display: false,
     posX: 0,
     posY: 0,
-    feed: null,
+    feedId: null,
   });
 
-  const handleFeedColorClick = (feed: Feed) => {
+  const handleFeedColorClick = (ev: MouseEvent<HTMLButtonElement>, feedId: string) => {
     setDisplayColorPicker({
       display: true,
-      posX: event.target.offsetLeft - event.target.offsetWidth / 2,
-      posY: event.target.offsetTop + event.target.offsetHeight + 10,
-      feed: feed,
+      posX: ev.currentTarget.offsetLeft - ev.currentTarget.offsetWidth / 2,
+      posY: ev.currentTarget.offsetTop + ev.currentTarget.offsetHeight + 10,
+      feedId: feedId,
     });
   };
   const handleFeedColorClose = () => {
-    setDisplayColorPicker({ display: false, posX: 0, posY: 0, feed: null });
+    setDisplayColorPicker({ display: false, posX: 0, posY: 0, feedId: null });
   };
   const handleFeedColorChange = (color: ColorResult) => {
-    onChangeFeedColorCode(displayColorPicker.feed.id, color.hex);
+    onChangeFeedColorCode(displayColorPicker.feedId!, color.hex);
     handleFeedColorClose();
   };
 
@@ -81,7 +81,7 @@ export default function FeedList(
             <button
               className="border-2 w-5 h-5 inline-block"
               style={{backgroundColor: feed.colorCode}}
-              onClick={() => {handleFeedColorClick(feed)}}
+              onClick={(ev) => {handleFeedColorClick(ev, feed.id)}}
             />
             <span className="px-1 w-40 inline-block truncate">
               { feedLoadingStatuses[feed.id] ? (

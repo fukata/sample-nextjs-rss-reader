@@ -17,7 +17,7 @@ export async function FeedItemsIndexApi(
   res: NextApiResponse<ApiResponseData<ResponseData>>,
   session: Session
 ) {
-  const currentUser = session.user;
+  const currentUser = session.user!;
   const limit = 50;
   const page = typeof req.query.page === 'string' ? parseInt(req.query.page || '1', 10) : 1;
   const skip = page > 0 ? (page - 1) * limit : 0;
@@ -33,7 +33,7 @@ export async function FeedItemsIndexApi(
 
   const feedItems = await prisma.feedItem.findMany({
     where: {
-      userId: currentUser.id,
+      userId: currentUser.id as string,
     },
     orderBy: [
       { publishedAt: 'desc' },

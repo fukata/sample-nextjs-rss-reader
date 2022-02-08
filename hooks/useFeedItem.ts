@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
-import {FeedItem} from "@prisma/client";
+import {Prisma, FeedItem} from "@prisma/client";
 
 export const useFeedItem = () => {
-  const [feedItems, setFeedItems] = useState([]);
+  const [feedItems, setFeedItems] = useState<Prisma.FeedItemGetPayload<{ include: { feed: true } }>[]>([]);
   const [nextPage, setNextPage] = useState<number | null>(2);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export const useFeedItem = () => {
     setFeedItems(resp.data?.feedItems ?? []);
   };
 
-  const prependFeedItems = (newFeedItems: FeedItem[]) => {
+  const prependFeedItems = (newFeedItems: Prisma.FeedItemGetPayload<{ include: { feed: true } }>[]) => {
     setFeedItems([...newFeedItems, ...feedItems]);
   };
 
@@ -44,7 +44,7 @@ export const useFeedItem = () => {
     // 重複排除
     const existsFeedItemMap : { [key: string] : boolean } = {};
     feedItems.forEach(item => existsFeedItemMap[item.id] = true );
-    const newFeedItems = (resp.data?.feedItems ?? []).filter(item => !existsFeedItemMap[item.id]);
+    const newFeedItems = (resp.data?.feedItems ?? []).filter((item: FeedItem) => !existsFeedItemMap[item.id]);
 
     setFeedItems([...feedItems, ...newFeedItems]);
 

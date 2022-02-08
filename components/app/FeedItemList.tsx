@@ -1,7 +1,6 @@
-import {FeedItem} from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import format from "date-fns/format";
 import {textColorCodeFromBgColor} from "@/lib/colors";
-import {useState} from "react";
 import {LoadMore} from "@/components/app/LoadMore";
 
 export default function FeedItemList(
@@ -9,7 +8,7 @@ export default function FeedItemList(
     feedItems,
     onLoadMore,
   } : {
-    feedItems: FeedItem[],
+    feedItems: Prisma.FeedItemGetPayload<{ include: { feed: true } }>[],
     onLoadMore: () => Promise<LoadMoreResult>,
   }
 ) {
@@ -32,6 +31,7 @@ export default function FeedItemList(
             <a
               href={item.url}
               target="_blank"
+              rel="noreferrer"
             >
               {item.title}
             </a>
