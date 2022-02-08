@@ -51,7 +51,7 @@ export async function FeedItemsIndexApi(
       feedItems: feedItems,
       pagination: {
         currentPage: page,
-        nextPage: page === AVAILABLE_PAGE_LIMIT || feedItems.length <= limit ? null : page + 1,
+        nextPage: page === AVAILABLE_PAGE_LIMIT || feedItems.length < limit ? null : page + 1,
       }
     }
   });

@@ -37,7 +37,7 @@ export const useFeedItem = () => {
 
   const loadMoreFeedItems = async () : Promise<LoadMoreResult> => {
     const resp = await (await fetch(`/api/feedItems?page=${nextPage}`)).json();
-    if (resp.data?.pagination && resp.data?.pagination.nextPage) {
+    if (resp.data?.pagination) {
       setNextPage(resp.data?.pagination.nextPage);
     }
 
